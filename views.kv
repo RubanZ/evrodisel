@@ -1,0 +1,590 @@
+<Menu@GridLayout>:
+    rows: 1
+    cols: 4
+    size_hint_y: 0.07
+    height: 45
+    name_device: u'не выбрано'
+    test_name: u'не выбран'
+    comButton: comButton
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: 5
+        spacing: 5
+        BoxLayout:
+            size_hint_y: None
+            height: "40dp"
+
+            Button:
+                text: u'Открыть файл'
+                size_hint_x: None
+                width: self.texture_size[0] + 20
+                font_size: 20
+                on_release: root.open()
+
+
+            Label:
+                size_hint_x: None
+                width: self.texture_size[0]
+
+                text: u' Устройство: ' + root.name_device + ' '
+                font_size: 20
+            
+            ActionButton:
+                background_color:[0.2,0.2,0.2,1]
+                text: 'Previous screen'
+                icon: 'data/icons/chevron-left.png'
+                on_release: root.changeTest(self)
+
+            Label:
+                size_hint_x: None
+                width: self.texture_size[0]
+                text: u' Тест: ' + root.test_name + ' '
+                font_size: 20
+
+            ActionButton:
+                background_color:[0.2,0.2,0.2,1]
+                text: 'Next screen'
+                icon: 'data/icons/chevron-right.png'
+                on_release: root.changeTest(self)
+            
+            Button:
+                id: comButton
+                text: u'Подключиться к устройству'
+                size_hint_x: None
+                width: self.texture_size[0] + 20
+                font_size: 20
+                on_release: root.comPortSelector()
+
+<Barrel_inning@Widget>:
+    border_color: 1, 0, 0, 1
+    fill_color: 0, 1, 0, 1
+
+    size: 96, 340
+
+    percent: 0
+    delta: 0
+
+    title: u'Подача' # заголовок колбы
+
+    flow: 46.3
+    current_flow: 40
+
+
+    canvas:
+        Color:
+            rgb: self.border_color
+        Ellipse:
+            pos: self.pos
+            size: 96, 40
+            angle_start: 90
+            angle_end: 270
+
+        Color:
+            rgb: self.fill_color
+        Ellipse:
+            pos: self.pos[0] + 2, self.pos[1] + 2
+            size:92,36
+            angle_start: 90
+            angle_end: 270
+
+        Color:
+            rgba: self.border_color
+        Rectangle:
+            pos: self.pos[0], self.pos[1] + 20
+            size: 96, 300
+        
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos[0] + 2, self.pos[1] + 20
+            size: 92, 298
+
+        Color:
+            rgba: self.fill_color
+        Rectangle:
+            pos: self.pos[0] + 2, self.pos[1] + 20
+            size: 92, (298/100 * (self.current_flow/(self.flow/66)))
+
+        Color:
+            rgb: 1, 1, 1,
+        Line:
+            points: self.pos[0], self.pos[1] + 20 + (298/100 * (self.percent - self.delta)), self.pos[0] + 110, self.pos[1] + 20 + (298/100 *  (self.percent - self.delta))
+            width: 1.5
+
+        Color:
+            rgb: 1, 1, 1,
+        Line:
+            points: self.pos[0], self.pos[1] + 20 + (298/100 * (self.percent + self.delta)), self.pos[0] + 110, self.pos[1] + 20 + (298/100 * (self.percent + self.delta))
+            width: 1.5
+    
+    Label:
+        pos: root.pos[0] + 115, root.pos[1] + (298/100 * (root.percent + root.delta))
+        size_hint: None, None
+        height: "40dp"
+        width: self.texture_size[0]
+        text: 'MAX'
+        color: 1, 1, 1, 1
+        font_size: 16
+
+    Label:
+        pos: root.pos[0] + 115, root.pos[1] + (298/100 * (root.percent - root.delta))
+        size_hint: None, None
+        height: "40dp"
+        width: self.texture_size[0]
+        text: 'MIN'
+        color: 1, 1, 1, 1
+        font_size: 16
+    
+    Label:
+        pos: root.pos[0], root.pos[1] + 335
+        size_hint: None, None
+        height: "40dp"
+        width: 96
+        text: root.title
+        color: 1, 1, 1, 1
+        font_size: 20
+        bold: True
+
+    Label:
+        pos: root.pos[0], root.pos[1] + 310
+        size_hint: None, None
+        height: "40dp"
+        width: 96
+        text: str(root.flow) + " ± " + str(root.delta) + " L/h"
+        color: 1, 1, 1, 1
+        font_size: 16
+
+<Barrel_reverse@Widget>:
+    border_color: 1, 0, 0, 1
+    fill_color: 0, 1, 0, 1
+
+    size: 96, 340
+
+    title: u'Обратка' # заголовок колбы
+
+
+    percent: 0
+
+    flow: 46.3
+    current_flow: 40
+
+    canvas:
+        Color:
+            rgb: self.border_color
+        Ellipse:
+            pos: self.pos
+            size: 96, 40
+            angle_start: 90
+            angle_end: 270
+
+        Color:
+            rgb: self.fill_color
+        Ellipse:
+            pos: self.pos[0] + 2, self.pos[1] + 2
+            size:92,36
+            angle_start: 90
+            angle_end: 270
+
+        Color:
+            rgba: self.border_color
+        Rectangle:
+            pos: self.pos[0], self.pos[1] + 20
+            size: 96, 300
+        
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos[0] + 2, self.pos[1] + 20
+            size: 92, 298
+
+        Color:
+            rgba: self.fill_color
+        Rectangle:
+            pos: self.pos[0] + 2, self.pos[1] + 20
+            size: 92, (298/100 * (self.current_flow/(self.flow/66)))
+
+        Color:
+            rgb: 1, 1, 1,
+        Line:
+            points: self.pos[0], self.pos[1] + 20 + (298/100 * (self.percent)), self.pos[0] + 110, self.pos[1] + 20 + (298/100 * (self.percent))
+            width: 1.5
+
+    Label:
+        pos: root.pos[0] + 115, root.pos[1] + (298/100 * (root.percent))
+        size_hint: None, None
+        height: "40dp"
+        width: self.texture_size[0]
+        text: 'MIN'
+        color: 1, 1, 1, 1
+        font_size: 16
+
+    Label:
+        pos: root.pos[0], root.pos[1] + 335
+        size_hint: None, None
+        height: "40dp"
+        width: 96
+        text: root.title
+        color: 1, 1, 1, 1
+        font_size: 20
+        bold: True
+    
+    Label:
+        pos: root.pos[0], root.pos[1] + 310
+        size_hint: None, None
+        height: "40dp"
+        width: 96
+        text: "min: " + str(root.flow) + " L/h"
+        color: 1, 1, 1, 1
+        font_size: 16
+    
+    
+
+
+<LeftPanel@GridLayout>:
+    rows: 5
+    cols: 1
+    #Переменные
+    current_motor_speed: '0'
+    set_motor_speed: '100'
+    set_bar: '5'
+    current_bar: '0'
+
+    GridLayout:
+        rows: 1
+        cols: 5
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: 5
+            spacing: 5
+            BoxLayout:
+                size_hint_y: None
+                height: "40dp"
+
+                Label:
+                    text: u"   Мотор__________________________"
+                    size_hint_x: None
+                    width: self.texture_size[0]
+                    font_size: 25
+                    bold: True
+                Label:
+                    text: root.current_motor_speed + u' обр/мин'
+                    font_size: 25
+                    bold: True
+            BoxLayout:
+                size_hint_y: None
+                height: "40dp"
+
+                Label:
+                    size_hint_x: None
+                    width: "100dp"
+                    text: u"Команды"
+                    
+                ActionButton:
+                    background_color:[0.2,0.2,0.2,1]
+                    icon:'data/icons/ic_rotate_left_128_28734.png'
+                    on_press:
+                        self.icon = 'data/icons/ic_rotate_right_128_28733.png'
+
+                ActionButton:
+                    background_color:[0.2,0.2,0.2,1]
+                    text: 'Previous screen'
+                    icon: 'data/icons/chevron-left.png'
+                    on_release: root.changeValue('speed', -100)
+
+                ActionButton:
+                    background_color:[0.2,0.2,0.2,1]
+                    text: root.set_motor_speed + u' обр/мин'
+                    on_release: root.openKeyboard('speed')
+                    
+                ActionButton:
+                    background_color:[0.2,0.2,0.2,1]
+                    text: 'Next screen'
+                    icon: 'data/icons/chevron-right.png'
+                    on_release: root.changeValue('speed', 100)
+                
+                Switch:
+                    size_hint_x: None
+                    width: "100dp"
+                    on_active: 
+
+
+            BoxLayout:
+                size_hint_y: None
+                height: "40dp"
+
+                
+                ActionButton:
+                    text:"+200"
+                    group: "a_group"
+                    id: a1
+                    on_release: root.changeValue('speed', 200)
+                
+
+
+            BoxLayout:
+                size_hint_y: None
+                height: "40dp"
+
+                Label:
+                    text: u"Давление_______________________"
+                    size_hint_x: None
+                    width: "400dp"
+                    font_size: 25
+                    bold: True
+                Label:
+                    text: root.current_bar + ' Бар'
+                    font_size: 25
+                    bold: True
+            BoxLayout:
+                size_hint_y: None
+                height: "40dp"
+
+                Label:
+                    size_hint_x: None
+                    width: "100dp"
+                    text: u"Команды"
+                    
+
+                ActionButton:
+                    background_color:[0.2,0.2,0.2,1]
+                    text: 'Previous screen'
+                    icon: 'data/icons/chevron-left.png'
+                    on_release: root.changeValue('pressure', -100)
+
+                ActionButton:
+                    background_color:[0.2,0.2,0.2,1]
+                    text: root.set_bar + ' Бар'
+                    on_release: root.openKeyboard('pressure')
+                    
+                ActionButton:
+                    background_color:[0.2,0.2,0.2,1]
+                    text: 'Next screen'
+                    icon: 'data/icons/chevron-right.png'
+                    on_release: root.changeValue('pressure', 100)
+                
+                ActionButton:
+                    text:"+200"
+                    group: "a_group"
+                    id: a1
+                    on_release: root.changeValue('pressure', 200)
+                
+                ActionButton:
+                    text:"+500"
+                    group: "a_group"
+                    id: faulty
+                    on_release: root.changeValue('pressure', 500)
+
+                Switch:
+                    size_hint_x: None
+                    width: "100dp"
+                    on_active: 
+            
+                
+
+            
+
+<RightPanel@GridLayout>:
+    rows: 5
+    cols: 1
+
+    flow: flow
+    overflow: overflow
+
+    GridLayout:
+        rows: 1
+        cols: 5
+        
+        BoxLayout:
+            orientation: "vertical"
+            padding: 5
+            spacing: 5   
+            BoxLayout:
+                Barrel_inning:
+                    id: flow
+                    percent: 66
+                    flow: 46.3
+                    delta: 8
+                    current_flow: 40
+
+                Barrel_reverse:
+                    id: overflow
+                    percent: 66
+                    flow: 21
+                    current_flow: 23
+
+
+
+<PumpScreen>:
+    FloatLayout:
+        Menu:
+            pos_hint: {'x': 0, 'top': 1}
+
+        LeftPanel:
+            pos_hint: {'x': 0, 'top': 0.75}
+            size_hint_x: 0.5
+            size_hint_y: None
+
+        RightPanel:
+            pos_hint: {'right': 1, 'center_y': 0.3}
+            size_hint: 0.5, None
+
+
+        Image:
+            source: 'data/icons/logo.png'
+            size_hint: None, None
+            size: 100, 100
+            pos_hint: {'right': 1, 'top': 1}
+
+
+
+<SelectCOM@Popup>:
+    title: u'Выбор устройства'
+    title_size: '25sp'
+    size_hint: None, None
+    size: 400, 400
+    auto_dismiss:False
+    deviceList: deviceList
+
+    FloatLayout:
+        GridLayout:
+            id: deviceList
+            cols: 1
+            rows: 5
+            size_hint: 1, 1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+
+
+<PopupSelectFile@Popup>:
+    title: u'Выбор файла'
+    title_size: '25sp'
+    size_hint: None, None
+    size: 1000, 600
+    auto_dismiss:False
+
+    list: list
+    filechooser: filechooser
+
+    FloatLayout:
+        BoxLayout:
+            id: list
+            orientation :'vertical'
+            pos_hint: {'x':0, 'top':1}
+            size_hint: 1, 1
+            padding: 20
+            spacing: 20
+
+
+            FileChooser:
+                id: filechooser
+
+                FileChooserListLayout
+
+            BoxLayout:
+                size_hint_y: None
+                height: 30
+                Button:
+                    text: u"Отмена"
+                    on_release: root.dismiss()
+
+                Button:
+                    text: u"Загрузить"
+                    on_release: root.load(filechooser.path, filechooser.selection)
+
+
+
+
+
+<PopupKeyboard@Popup>:
+    title: u'Обороты двигателя'
+    title_size: '25sp'
+    size_hint: None, None
+    size: 1000, 600
+    auto_dismiss:False
+    lebel: lebel
+
+    FloatLayout:
+
+
+        Label:
+            id: lebel
+            background_color: [0.5, 0, 0, 1]
+            text: '100'
+            halign: 'left'
+            valign: 'center'
+            font_size: '45sp'
+            text_size: 920, 600
+            size_hint: 1, 0.1
+            pos_hint: {'x':0, 'top':0.93}
+
+
+        GridLayout:
+            cols: 3
+            rows: 4
+            pos_hint: {'x':0, 'top':0.8}
+            size_hint: 1, 0.8
+            padding: 20
+            spacing: 20
+
+            Button:
+                font_size: '25sp'
+                text: '7'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '8'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '9'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '4'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '5'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '6'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '1'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '2'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: '3'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                text: 'CE'
+                on_press: root.ce()
+                
+
+            Button:
+                font_size: '25sp'
+                text: '0'
+                on_press: root.btn_num(self)
+
+            Button:
+                font_size: '25sp'
+                background_color: [0.3, 0.8, 1, 1]
+                text: 'OK'
+                on_release: root.ok()
